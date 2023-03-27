@@ -6,8 +6,8 @@ import java.util.Map;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import com.example.tacos.model.Ingredient;
-import com.example.tacos.model.Ingredient.Type;
+import com.example.tacos.domain.Ingredient;
+import com.example.tacos.domain.Ingredient.Type;
 
 @Component
 public class IngredientsByIdConverter implements Converter<String, Ingredient> {

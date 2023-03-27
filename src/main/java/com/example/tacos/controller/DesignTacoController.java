@@ -6,23 +6,27 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.example.tacos.model.Ingredient;
-import com.example.tacos.model.Ingredient.Type;
-import com.example.tacos.model.Taco;
-import com.example.tacos.model.TacoOrder;
+import com.example.tacos.domain.Ingredient;
+import com.example.tacos.domain.Taco;
+import com.example.tacos.domain.TacoOrder;
+
+import jakarta.validation.Valid;
+
+import com.example.tacos.domain.Ingredient.Type;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
 @RequestMapping("/design")
-@SessionAttributes("taccoOrder")
+@SessionAttributes("tacoOrder")
 public class DesignTacoController {
 	
 	@ModelAttribute
@@ -58,10 +62,10 @@ public class DesignTacoController {
 				.collect( Collectors.toList() );
 	}
 	
-	@ModelAttribute(name = "taccoOrder")
+	@ModelAttribute(name = "tacoOrder")
 	public TacoOrder order()
 	{
-		log.info("creating taccoOrder");
+		log.info("creating tacoOrder");
 		return new TacoOrder();
 	}
 	
@@ -79,8 +83,12 @@ public class DesignTacoController {
 	}
 	
 	@PostMapping
-	public String processTaco(Taco taco, @ModelAttribute TacoOrder tacoOrder)
+	public String processTaco(@Valid Taco taco, Errors errors, @ModelAttribute TacoOrder tacoOrder)
 	{
+		if(errors.hasErrors())
+		{
+			return "design";
+		}
 		tacoOrder.addTaco(taco);
 		log.info("Processing taco: {}", taco);
 		
