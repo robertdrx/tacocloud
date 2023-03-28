@@ -4,6 +4,11 @@
 	<title>Taco Cloud</title>
 </head>
 <body>
+	
+	<form method="POST" th:action="@{/logout}">
+		<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+		<input type="submit" value="Logout"/>
+	</form>
 
 	<form method="POST" th:action="@{/orders}" th:object="${tacoOrder}">
 		<h1>Order your taco creations!</h1>
@@ -75,6 +80,8 @@
 			th:if="${#fields.hasErrors('ccCVV')}" 
 			th:errors="*{ccCVV}">CVV Error</span>
 		<br/>
+		
+		<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 		
 		<input type="submit" value="Submit Order"/>
 		

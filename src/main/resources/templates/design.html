@@ -6,6 +6,11 @@
 		
 		<h1>Design your taco</h1>
 		
+		<form method="POST" th:action="@{/logout}">
+			<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+			<input type="submit" value="Logout"/>
+		</form>
+		
 		<img th:src="@{/images/taco-logo.jpg}" width="200" />
 		
 		<form method="POST" th:object="${taco}">
@@ -53,6 +58,9 @@
 				
 				</br>
 				</br>
+				
+				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+				
 				<button>Submit your Taco</button>
 			</div>
 			
