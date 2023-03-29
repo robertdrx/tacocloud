@@ -6,6 +6,10 @@
 <body>
 	<h1>Welcome</h1>
 	<img th:src="@{/images/taco-logo.jpg}" width="200" />
+	
+	<form method="POST" th:action="@{/logout}">
+		<input type="submit" value="Logout"/>
+	</form>
 </body>
 
 </html>
