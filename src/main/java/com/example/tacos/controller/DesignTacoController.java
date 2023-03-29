@@ -1,6 +1,6 @@
 package com.example.tacos.controller;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,37 +14,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.example.tacos.domain.Ingredient;
+import com.example.tacos.domain.Ingredient.Type;
 import com.example.tacos.domain.Taco;
 import com.example.tacos.domain.TacoOrder;
+import com.example.tacos.repository.IngredientRepository;
+import com.example.tacos.repository.TacoRepository;
 
 import jakarta.validation.Valid;
-
-import com.example.tacos.domain.Ingredient.Type;
-
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
 @RequestMapping("/design")
 @SessionAttributes("tacoOrder")
+@RequiredArgsConstructor
 public class DesignTacoController {
+	
+	private final IngredientRepository ingredientRepo;
+	private final TacoRepository tacoRepo;
 	
 	@ModelAttribute
 	public void addIngredientsToModel(Model model)
 	{
 		log.info("Inside addIngredientsToModel");
-		List<Ingredient> ingredients = Arrays.asList(
-				new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
-				new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
-				new Ingredient("GRBF", "Ground Beef", Type.PROTEIN),
-				new Ingredient("CARN", "Carnitas", Type.PROTEIN),
-				new Ingredient("TMTO", "Diced Tomatoes", Type.VEGGIES),
-				new Ingredient("LETC", "Lettuce", Type.VEGGIES),
-				new Ingredient("CHED", "Cheddar", Type.CHEESE),
-				new Ingredient("JACK", "Monterrey Jack", Type.CHEESE),
-				new Ingredient("SLSA", "Salsa", Type.SAUCE),
-				new Ingredient("SRCR", "Sour Cream", Type.SAUCE)
-				);
+		
+		List<Ingredient> ingredients = new ArrayList<>();
+		
+		ingredientRepo.findAll().forEach( i -> ingredients.add(i));
 		
 		Type[] types =  Ingredient.Type.values();
 		for(Type type : types) 
@@ -89,7 +86,8 @@ public class DesignTacoController {
 		{
 			return "design";
 		}
-		tacoOrder.addTaco(taco);
+		Taco tacoSaved = tacoRepo.save(taco);
+		tacoOrder.addTaco(tacoSaved);
 		log.info("Processing taco: {}", taco);
 		
 		return "redirect:/orders/current";

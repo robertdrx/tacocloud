@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+	<head>		
+	</head>
+	<body>
+		<h3>Orders made by user: <span th:text="${user.username}"></span></h3>
+		
+		<div th:each="order : ${orders}">
+			<span th:text="|${order.id} - ${order.deliveryName} - ${order.deliveryStreet}|">Order info</span>
+		</div>
+	</body>
+</html>

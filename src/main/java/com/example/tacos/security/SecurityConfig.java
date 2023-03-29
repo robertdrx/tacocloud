@@ -3,6 +3,7 @@ package com.example.tacos.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,23 +15,12 @@ import com.example.tacos.repository.UserRepository;
 
 @Configuration
 public class SecurityConfig {
-
-	private UserRepository userRepo;
 	
 	@Bean
 	public PasswordEncoder passwordEncoder()
 	{
 		return new BCryptPasswordEncoder();
 	}
-	
-//	@Bean 
-//	public UserDetailsService userDetailsService(PasswordEncoder encoder)
-//	{
-//		List<UserDetails> userList = new ArrayList<>();
-//		userList.add(new User("buzz", encoder.encode("password"), Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))));
-//		userList.add(new User("woody", encoder.encode("password"), Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))));
-//		return new InMemoryUserDetailsManager(userList);
-//	}
 	
 	@Bean
 	public UserDetailsService userDetailsService(UserRepository userRepo)
@@ -46,7 +36,10 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
 	{
+		//enable h2-console
 		//http.csrf().disable();
+		//http.headers().frameOptions().disable();
+		
 		return http
 				.authorizeRequests()
 				.requestMatchers("/design", "/orders").hasRole("USER")
@@ -63,4 +56,5 @@ public class SecurityConfig {
 				.and()
 				.build();
 	}
+
 }
