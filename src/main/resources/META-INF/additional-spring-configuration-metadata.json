@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "taco.orders.page-size",
+  "type": "java.lang.String",
+  "description": "Page size property for getting orders"
+}]}
